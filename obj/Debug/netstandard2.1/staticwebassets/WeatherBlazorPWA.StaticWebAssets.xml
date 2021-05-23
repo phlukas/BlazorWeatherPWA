@@ -1,0 +1,5 @@
+﻿<StaticWebAssets Version="1.0">
+  <ContentRoot BasePath="/" Path="C:\Users\lukas\Desktop\Projektai\WeatherBlazorPWA\WeatherBlazorPWA\bin\Debug\netstandard2.1\wwwroot\" />
+  <ContentRoot BasePath="_content/Blazored.Typeahead" Path="C:\Users\lukas\.nuget\packages\blazored.typeahead\4.6.0\build\..\staticwebassets\" />
+  <ContentRoot BasePath="_content/Radzen.Blazor" Path="C:\Users\lukas\.nuget\packages\radzen.blazor\3.3.1\build\..\staticwebassets\" />
+</StaticWebAssets>

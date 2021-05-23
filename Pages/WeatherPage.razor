@@ -1,0 +1,59 @@
+﻿@page "/"
+
+@using WeatherBlazorPWA.DataModels
+@using WeatherBlazorPWA.Services
+@using WeatherBlazorPWA.Components
+
+@inject TemperatureProvider temperatureProvider
+@inject CitiesProvider citiesProvider
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <Autocomplete SelectedCity=selectedCity TextChanged="DisplayTemperature"/>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            Try to find any city in Lithuania with autocomplete.
+        </div>
+    </div>
+
+    @if (temperatures == null)
+    {
+        <h1>Loading...</h1>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-4">
+                <h1>@city weather forecast</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="w-100">
+                <WeatherChart Temperatures=temperatures/>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    string city = "Kaunas";
+    City selectedCity = new City();
+    List<TemperatureData> temperatures;
+
+    protected override async Task OnInitializedAsync()
+    {
+        temperatures = await temperatureProvider.GetTemperature(city);
+    }
+
+    protected void DisplayTemperature(OnInputChangedEventArgs args)
+    {
+        this.city = args.City;
+        if (args.temperatures != null)
+            this.temperatures = args.temperatures;
+    }
+}

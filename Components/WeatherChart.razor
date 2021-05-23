@@ -1,0 +1,14 @@
+﻿@using WeatherBlazorPWA.DataModels
+
+<RadzenChart>
+    <RadzenLineSeries Smooth="true" Data="@Temperatures" CategoryProperty="Date" Title="Temperature °C" LineType="LineType.Solid" ValueProperty="Temperature">
+        <RadzenMarkers MarkerType="MarkerType.Circle" />
+    </RadzenLineSeries>
+    <RadzenCategoryAxis Padding="20" FormatString="{0:ddd, hh}" />
+    <RadzenGridLines Visible="true" />
+</RadzenChart>
+
+@code {
+    [Parameter]
+    public List<TemperatureData> Temperatures { get; set; }
+}

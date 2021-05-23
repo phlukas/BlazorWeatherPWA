@@ -1,0 +1,48 @@
+﻿@using WeatherBlazorPWA.DataModels
+@using WeatherBlazorPWA.Services
+@using Blazored.Typeahead
+
+@inject TemperatureProvider temperatureProvider
+@inject CitiesProvider citiesProvider
+
+<BlazoredTypeahead SearchMethod="GetCities"
+                   TValue="City"
+                   TItem="City"
+                   Value="SelectedCity"
+                   ValueChanged="a => SelectedResultChanged(a.Title)" 
+                   ValueExpression="@(() => SelectedCity)"
+                   Debounce=500>
+    <SelectedTemplate>
+        @context.Title
+    </SelectedTemplate>
+    <ResultTemplate>
+        @context.Title
+    </ResultTemplate>
+</BlazoredTypeahead>
+
+@code {
+    [Parameter]
+    public City SelectedCity { get; set; }
+    [Parameter]
+    public EventCallback<OnInputChangedEventArgs> TextChanged { get; set; }
+
+    protected async Task<IEnumerable<City>> GetCities(string searchText)
+    {
+        List<City> cities = await citiesProvider.GetCities(searchText);
+        if (cities.FirstOrDefault(x => x.Title == searchText) != null)
+            await TextChanged.InvokeAsync(new OnInputChangedEventArgs() { City = searchText, temperatures = await temperatureProvider.GetTemperature(searchText) });
+        return cities;
+    }
+
+    protected async void SelectedResultChanged(string searchText)
+    {
+        try
+        {
+            await TextChanged.InvokeAsync(new OnInputChangedEventArgs() { City = searchText, temperatures = await temperatureProvider.GetTemperature(searchText) });
+        }
+        catch (Exception)
+        {
+            await TextChanged.InvokeAsync(new OnInputChangedEventArgs() { City = searchText + " City is not found.", temperatures = null });
+        }
+    }
+}
